@@ -7,11 +7,11 @@ ENV COMPOSER_ALLOW_SUPERUSER 1
 COPY --from=composer /usr/bin/composer /usr/bin/composer
 
 RUN apk add --no-cache --virtual build-dependencies g++ make autoconf libpng libjpeg-turbo && \
-    apk add -U libpng-dev libjpeg-turbo-dev && \
-    pecl install -o -f swoole && \
-    docker-php-ext-enable swoole && \
+    apk add -U libpng-dev libjpeg-turbo-dev libstdc++ && \
     docker-php-ext-configure gd --with-png-dir=/usr/include/ --with-jpeg-dir=/usr/include/ && \
     docker-php-ext-install gd exif pcntl sockets zip pdo_mysql && \
+    pecl install -o -f swoole && \
+    docker-php-ext-enable swoole && \
     apk del build-dependencies && \
     rm -rf /tmp/* /src /var/cache/apk/* && \
     composer global require hirak/prestissimo && \
