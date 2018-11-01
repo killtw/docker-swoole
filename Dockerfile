@@ -9,7 +9,7 @@ COPY --from=composer /usr/bin/composer /usr/bin/composer
 RUN apk add --no-cache --virtual build-dependencies g++ make autoconf libpng libjpeg-turbo && \
     apk add -U libpng-dev libjpeg-turbo-dev libstdc++ && \
     docker-php-ext-configure gd --with-png-dir=/usr/include/ --with-jpeg-dir=/usr/include/ && \
-    docker-php-ext-install gd exif pcntl sockets zip pdo_mysql && \
+    docker-php-ext-install bcmath exif gd gmp pcntl pdo_mysql sockets zip && \
     pecl install -o -f swoole && \
     docker-php-ext-enable swoole && \
     apk del build-dependencies && \
