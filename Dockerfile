@@ -5,6 +5,7 @@ WORKDIR /app
 ENV COMPOSER_ALLOW_SUPERUSER 1
 
 COPY --from=composer /usr/bin/composer /usr/bin/composer
+COPY php.ini $PHP_INI_DIR/php.ini
 
 RUN apk add --no-cache --virtual build-dependencies g++ make autoconf libpng libjpeg-turbo gmp && \
     apk add -U libpng-dev libjpeg-turbo-dev libstdc++ gmp-dev && \
