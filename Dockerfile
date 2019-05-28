@@ -2,16 +2,24 @@ FROM php:7.2-alpine
 
 WORKDIR /app
 
-ENV COMPOSER_ALLOW_SUPERUSER 1
+ENV SWOOLE_VERSION v4.3.4
 
 COPY --from=composer /usr/bin/composer /usr/bin/composer
 COPY php.ini $PHP_INI_DIR/php.ini
 
-RUN apk add --no-cache --virtual build-dependencies g++ make autoconf libpng libjpeg-turbo gmp && \
+RUN export COMPOSER_ALLOW_SUPERUSER=1 && \
+    apk add --no-cache --virtual build-dependencies g++ make autoconf libpng libjpeg-turbo gmp && \
     apk add -U libpng-dev libjpeg-turbo-dev libstdc++ gmp-dev && \
     docker-php-ext-configure gd --with-png-dir=/usr/include/ --with-jpeg-dir=/usr/include/ && \
     docker-php-ext-install bcmath exif gd gmp pcntl pdo_mysql sockets zip && \
-    pecl install -o -f swoole && \
+    cd /tmp && \
+    curl -o /tmp/swoole.tar.gz https://github.com/swoole/swoole-src/archive/${SWOOLE_VERSION}.tar.gz -L && \
+    tar zxvf swoole.tar.gz && \
+    mv swoole-src* swoole-src && \
+    cd swoole-src && \
+    phpize && \
+    ./configure --enable-sockets && \
+    make clean && make && make install && \
     docker-php-ext-enable swoole && \
     apk del build-dependencies && \
     rm -rf /tmp/* /src /var/cache/apk/* && \
