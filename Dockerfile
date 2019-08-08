@@ -9,8 +9,9 @@ COPY php.ini $PHP_INI_DIR/php.ini
 
 RUN export COMPOSER_ALLOW_SUPERUSER=1 && \
     apk add --no-cache --virtual build-dependencies g++ make autoconf libpng libjpeg-turbo gmp && \
-    apk add -U libpng-dev libjpeg-turbo-dev libstdc++ gmp-dev && \
+    apk add -U libpng-dev libjpeg-turbo-dev libstdc++ gmp-dev libzip-dev && \
     docker-php-ext-configure gd --with-png-dir=/usr/include/ --with-jpeg-dir=/usr/include/ && \
+    docker-php-ext-configure zip --with-libzip && \
     docker-php-ext-install bcmath exif gd gmp pcntl pdo_mysql sockets zip && \
     cd /tmp && \
     curl -o /tmp/swoole.tar.gz https://github.com/swoole/swoole-src/archive/${SWOOLE_VERSION}.tar.gz -L && \
