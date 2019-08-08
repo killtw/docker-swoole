@@ -1,8 +1,8 @@
-FROM php:7.2-alpine
+FROM php:7.3-alpine
 
 WORKDIR /app
 
-ENV SWOOLE_VERSION v4.3.4
+ENV SWOOLE_VERSION v4.4.3
 
 COPY --from=composer /usr/bin/composer /usr/bin/composer
 COPY php.ini $PHP_INI_DIR/php.ini
